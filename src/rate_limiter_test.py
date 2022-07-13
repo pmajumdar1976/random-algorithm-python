@@ -10,17 +10,17 @@ class RateLimiterExec(CommandExec):
         super(RateLimiterExec, self).__init__(name="RateLimiter", needsObj=False, returnsObj=True)
 
     def __call__(self, args: List) -> baseCode.RateLimiter:
-        if len(args) > 1:
+        if len(args) >= 1:
             maxAllowed = args[0]
-            if len(args) > 2:
+            if len(args) >= 2:
                 period = args[1]
             else:
-                period = DEFAULT_PERIOD
+                period = RateLimiterExec.DEFAULT_PERIOD
         else:
-            maxAllowed = DEFAULT_MAX_ALLOWED
-            period     = DEFAULT_PERIOD
+            maxAllowed = RateLimiterExec.DEFAULT_MAX_ALLOWED
+            period     = RateLimiterExec.DEFAULT_PERIOD
 
-        return baseCode.ConsistentHashing(maxAllowed, period)
+        return baseCode.RateLimiter(maxAllowed, period)
 
 class shouldAllowExec(CommandExec):
     def __init__(self):
@@ -28,8 +28,12 @@ class shouldAllowExec(CommandExec):
 
     def __call__(self, args: List) -> bool:
         if len(args):
-            timeStamp = args [0]
-            return obj.shouldAllow(timeStamp)
+            obj = args [0]
+            if len(args) > 1:
+                timeStamp = args[1]
+                return obj.shouldAllow(timeStamp)
+            else:
+                return False
         else:
             return False
 
