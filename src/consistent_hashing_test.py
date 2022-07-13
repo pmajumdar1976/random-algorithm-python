@@ -78,10 +78,6 @@ if __name__ == "__main__":
     execs.append(removeNodeExec())
     execs.append(getKeysInNodeExec())
 
-    execMap = {}
-    for e in execs:
-        execMap[e.name] = e
-
     testCases = [
         (["ConsistentHashing",    "addNode",       "getKeysInNode", "getKeysInNode",
           "getKeysInNode",        "removeNode",    "getNodeForKey", "getNodeForKey",
