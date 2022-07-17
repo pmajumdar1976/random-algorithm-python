@@ -1,3 +1,5 @@
+from timeit import default_timer as timer
+from datetime import timedelta
 from typing import List, Tuple, Optional
 
 class CommandExec:
@@ -18,8 +20,10 @@ class TestExec:
     def __call__(self, inputs:List[Tuple[List[str], List[List]]]):
         for tc in inputs:
             t = TestCase(self, tc[0], tc[1])
+            start = timer()
             r = t()
-            print("Result: {}".format(r))
+            end = timer()
+            print("Result: {} found in {} time".format(r,timedelta(seconds=end - start)))
 
 class TestCase:
     def __init__(self, executor: TestExec, fns: List[str], args: List[List]):
@@ -40,12 +44,14 @@ class TestCase:
             else:
                 print("=== Calling {}({}) ===>".format(e.name, arg))
                 r = e(arg)
+            print("<=== Returned {} ===\n".format(r))
             if r != None:
-                print("<=== Returned {} ===\n".format(r))
                 if e.returnsObj:
                     obj = r
                     results.append('null')
                 else:
                     results.append(r)
+            else:
+                results.append('null')
 
         return results
