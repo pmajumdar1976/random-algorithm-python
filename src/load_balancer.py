@@ -85,8 +85,8 @@ class DCLoadBalancer:
         m = DCLoadBalancer.Machine(machineId, capacity)
         self.machines [machineId] = m
         self.addCapacity(capacity, m)
-        self.log('self.capacityPQ = {}'.format([capacity * (-1) for capacity in self.capacityPQ]))
-        self.log('self.machineCapcities = {}'.format(self.machineCapcities))
+        #self.log('self.capacityPQ = {}'.format([capacity * (-1) for capacity in self.capacityPQ]))
+        #self.log('self.machineCapcities = {}'.format(self.machineCapcities))
         
 
     def removeMachine(self, machineId: int) -> None:
@@ -97,6 +97,7 @@ class DCLoadBalancer:
         self.removeCapacity(m.capacity, m)
 
         for app in m.apps:
+            #self.log('Removing app {}'.format(app.id))
             self.assignApplication(app)
 
         self.log('self.capacityPQ = {}'.format([capacity * (-1) for capacity in self.capacityPQ]))
@@ -120,8 +121,8 @@ class DCLoadBalancer:
         m.addApplication(app)
         self.addCapacity(m.capacity, m)
 
-        self.log('after assign: self.capacityPQ = {}'.format([capacity * (-1) for capacity in self.capacityPQ]))
-        self.log('after assign: self.machineCapcities = {}'.format(self.machineCapcities))
+        #self.log('after assign: self.capacityPQ = {}'.format([capacity * (-1) for capacity in self.capacityPQ]))
+        #self.log('after assign: self.machineCapcities = {}'.format(self.machineCapcities))
 
         return m.id
 
@@ -151,4 +152,4 @@ class DCLoadBalancer:
         if machineId not in self.machines:
             return []
         m = self.machines[machineId]
-        return [app.id for app in m.apps]
+        return [app.id for app in m.apps[:10]]
